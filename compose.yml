@@ -1,0 +1,53 @@
+services:
+  proxy:
+    build:
+      context: evalquiz-proxy
+      dockerfile: production-dockerfile
+    image: evalquizcontainers.azurecr.io/evalquiz-proxy
+    depends_on:
+      - client-react
+    ports:
+      - 80:80
+    container_name: evalquiz-proxy
+  client-flask:
+    build:
+      context: ../evalquiz-client-flask
+      dockerfile: production-dockerfile
+    image: evalquizcontainers.azurecr.io/evalquiz-client-flask
+    depends_on:
+      - pipeline-server
+      - material-server
+    restart: always
+    container_name: evalquiz-client-flask
+  pipeline-server:
+    build:
+      context: ../evalquiz-pipeline-server
+      dockerfile: production-dockerfile
+    image: evalquizcontainers.azurecr.io/evalquiz-pipeline-server
+    depends_on:
+      - pipeline-server-db
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+    container_name: evalquiz-pipeline-server
+  material-server:
+    build:
+      context: ../evalquiz-material-server
+      dockerfile: production-dockerfile
+    image: evalquizcontainers.azurecr.io/evalquiz-material-server
+    depends_on:
+      - material-server-db
+    container_name: evalquiz-material-server
+  client-react:
+    build:
+      context: ../evalquiz-client-react
+      dockerfile: production-dockerfile
+    image: evalquizcontainers.azurecr.io/evalquiz-client-react
+    depends_on:
+      - client-flask
+    container_name: evalquiz-client-react
+  pipeline-server-db:
+    image: mongo
+    container_name: evalquiz-pipeline-server-db
+  material-server-db:
+    image: mongo
+    container_name: evalquiz-material-server-db
