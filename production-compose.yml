@@ -2,12 +2,12 @@ services:
   proxy:
     build:
       context: evalquiz-proxy
-      dockerfile: Dockerfile
+      dockerfile: production-dockerfile
     image: evalquizcontainers.azurecr.io/evalquiz-proxy
     depends_on:
       - client-react
     ports:
-      - 8000:80
+      - 80:80
     container_name: evalquiz-proxy
   client-flask:
     build:
@@ -40,7 +40,7 @@ services:
   client-react:
     build:
       context: ../evalquiz-client-react
-      dockerfile: devbuild-dockerfile
+      dockerfile: production-dockerfile
     image: evalquizcontainers.azurecr.io/evalquiz-client-react
     depends_on:
       - client-flask
