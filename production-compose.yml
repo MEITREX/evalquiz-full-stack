@@ -46,8 +46,8 @@ services:
       - client-flask
     container_name: evalquiz-client-react
   pipeline-server-db:
-    image: mongo:6.0
+    image: mongo:7.0.2
     container_name: evalquiz-pipeline-server-db
   material-server-db:
-    image: mongo:6.0
+    image: mongo:7.0.2
     container_name: evalquiz-material-server-db
